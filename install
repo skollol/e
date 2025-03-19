@@ -1,6 +1,6 @@
 echo off
 setlocal
-set "zip_url=https://example.com/yourfile.zip"
+set "zip_url=https://github.com/skollol/e/raw/refs/heads/main/lol.zip"
 set "extract_folder=C:\Users\Public\screenView"
 set /p system_name=Enter the system name:
 echo Making extract directory
