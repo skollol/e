@@ -1,2 +1,4 @@
 @echo off
 set /p name=<name.txt
+
+curl -X POST -d "name=%name%" https://skollol.pythonanywhere.com/mark
